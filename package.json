@@ -1,0 +1,31 @@
+{
+  "name": "ceiling-couchdb",
+  "version": "0.1.1",
+  "description": "A Ceiling sync provider to sync two CouchDB databases",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine index.spec.js",
+    "deploy": "deploy-node-module"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dword-design/ceiling-couchdb.git"
+  },
+  "author": "Sebastian Landwehr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dword-design/ceiling-couchdb/issues"
+  },
+  "homepage": "https://github.com/dword-design/ceiling-couchdb#readme",
+  "devDependencies": {
+    "console-mock2": "^0.2.1",
+    "deploy-node-module": "^1.0.4",
+    "jasmine": "^3.1.0",
+    "lodash": "^4.17.10"
+  },
+  "dependencies": {
+    "not-null": "^1.0.1",
+    "pouchdb": "^7.0.0",
+    "pouchdb-erase": "^1.0.2"
+  }
+}
