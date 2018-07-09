@@ -27,7 +27,7 @@ module.exports = {
     console.log('Cleaning databases ...')
     return toDb.erase()
       .then(() => console.log(`Importing collections from ${fromUrl} ...`))
-      .then(() => new Promise(resolve => fromDb.replicate.to(toDb).on('complete', resolve)))
+      .then(() => new Promise((resolve, reject) => fromDb.replicate.to(toDb).on('complete', resolve).on('error', reject)))
   },
 
   endpointToString(endpoint = {}) {
