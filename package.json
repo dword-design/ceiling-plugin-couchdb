@@ -1,6 +1,6 @@
 {
   "name": "ceiling-couchdb",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Ceiling sync provider to sync two CouchDB databases",
   "main": "index.js",
   "scripts": {
