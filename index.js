@@ -15,7 +15,7 @@ module.exports = {
       if (notnull(endpoint.port, 5984) != 80) {
         result += `:${notnull(endpoint.port,  5984)}`;
       }
-      result += `/${notnull(endpoint.database, 'project')}?authSource=${notnull(endpoint.database, 'project')}`
+      result += `/${notnull(endpoint.database, 'project')}`
       return result
     }
 
