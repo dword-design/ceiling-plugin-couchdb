@@ -11,8 +11,8 @@ module.exports = {
       if (endpoint.inMemory) {
         return endpoint.database
       }
-      var result = `couchdb://${notnull(endpoint.user, 'root')}:${notnull(endpoint.password, 'root')}@${notnull(endpoint.host, '127.0.0.1')}`
-      if (notnull(endpoint.port, 5984) != 5984) {
+      var result = `http://${notnull(endpoint.user, 'root')}:${notnull(endpoint.password, 'root')}@${notnull(endpoint.host, 'localhost')}`
+      if (notnull(endpoint.port, 5984) != 80) {
         result += `:${notnull(endpoint.port,  5984)}`;
       }
       result += `/${notnull(endpoint.database, 'project')}?authSource=${notnull(endpoint.database, 'project')}`
@@ -34,8 +34,8 @@ module.exports = {
     if (endpoint.inMemory) {
       return endpoint.database
     }
-    var result = `couchdb://${notnull(endpoint.host, '127.0.0.1') }`
-    if (notnull(endpoint.port, 5984) != 5984) {
+    var result = `http://${notnull(endpoint.host, 'localhost') }`
+    if (notnull(endpoint.port, 5984) != 80) {
       result += `:${notnull(endpoint.port, 5984)}`
     }
     result += `/${notnull(endpoint.database, 'project')}`
