@@ -15,7 +15,7 @@ module.exports = {
       if (notnull(endpoint.port, 5984) != 5984) {
         result += `:${notnull(endpoint.port,  5984)}`;
       }
-      result += `/${endpoint.database}?authSource=${endpoint.database}`
+      result += `/${notnull(endpoint.database, 'project')}?authSource=${notnull(endpoint.database, 'project')}`
       return result
     }
 
@@ -30,15 +30,15 @@ module.exports = {
       .then(() => new Promise(resolve => fromDb.replicate.to(toDb).on('complete', resolve)))
   },
 
-  endpointToString(endpoint) {
+  endpointToString(endpoint = {}) {
     if (endpoint.inMemory) {
       return endpoint.database
     }
-    var result = `couchdb://${endpoint.host}`
+    var result = `couchdb://${notnull(endpoint.host, '127.0.0.1') }`
     if (notnull(endpoint.port, 5984) != 5984) {
       result += `:${notnull(endpoint.port, 5984)}`
     }
-    result += `/${endpoint.database}`
+    result += `/${notnull(endpoint.database, 'project')}`
     return result
   }
 }

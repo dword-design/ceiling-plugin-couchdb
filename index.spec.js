@@ -67,6 +67,8 @@ describe('PouchdbSyncProvider', () => {
   describe('endpointToString', () => {
 
     it('works', () => {
+      expect(CouchdbSyncProvider.endpointToString()).toEqual('couchdb://127.0.0.1/project')
+      expect(CouchdbSyncProvider.endpointToString({ database: 'project' })).toEqual('couchdb://127.0.0.1/project')
       expect(CouchdbSyncProvider.endpointToString({ database: 'project', host: 'local.de' })).toEqual('couchdb://local.de/project')
       expect(CouchdbSyncProvider.endpointToString({ database: 'project', host: 'local.de', port: 4000 })).toEqual('couchdb://local.de:4000/project')
       expect(CouchdbSyncProvider.endpointToString({ database: 'project', host: 'local.de', inMemory: true })).toEqual('project')
