@@ -1,5 +1,6 @@
 const PouchDB = require('pouchdb')
 const notnull = require('not-null')
+const _ = require('lodash')
 
 PouchDB.plugin(require('pouchdb-erase'))
 
@@ -27,7 +28,9 @@ module.exports = {
     console.log('Cleaning databases ...')
     return toDb.erase()
       .then(() => console.log(`Importing collections from ${fromUrl} ...`))
-      .then(() => new Promise((resolve, reject) => fromDb.replicate.to(toDb).on('complete', resolve).on('error', reject)))
+      .then(() => fromDb.allDocs({ include_docs: true, attachments: true }))
+      .then(docs => docs.rows.map(doc => _.omit(doc.doc, '_rev')))
+      .then(docs => toDb.bulkDocs(docs))
   },
 
   endpointToString(endpoint = {}) {
