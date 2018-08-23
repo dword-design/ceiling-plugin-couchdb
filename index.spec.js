@@ -1,15 +1,15 @@
 const CouchdbSyncProvider = require('./index')
 const PouchDB = require('pouchdb')
-const consoleMock = require('console-mock2')
 const _ = require('lodash')
 const Ceiling = require('ceiling')
 const stdout = require("test-console").stdout
+const uuid = require('uuid')
 
 describe('PouchdbSyncProvider', () => {
 
   describe('sync', () => {
 
-    /*beforeEach(done => {
+    beforeEach(done => {
       this.live = new PouchDB('live')
       this.local = new PouchDB('local')
 
@@ -37,10 +37,13 @@ describe('PouchdbSyncProvider', () => {
         inMemory: true,
         database: 'local',
       }
+      const restore = stdout.ignore()
       this.live.bulkDocs(this.liveTasks)
-        .then(() => consoleMock(() => CouchdbSyncProvider.sync(live, local)))
+        .then(() => CouchdbSyncProvider.sync(live, local))
+        .then(restore)
         .then(() => this.local.allDocs({ include_docs: true }))
-        .then(docs => docs.rows.map(doc => _.omit(doc.doc, '_rev')))
+        .then(result => result.rows.map(doc => doc.doc))
+        .then(docs => docs.map(doc => _.omit(doc, '_rev')))
         .then(docs => expect(docs).toEqual(this.liveTasks))
         .then(done)
     })
@@ -54,16 +57,23 @@ describe('PouchdbSyncProvider', () => {
         inMemory: true,
         database: 'local',
       }
+      const restore = stdout.ignore()
       Promise.all([
         this.live.bulkDocs(this.liveTasks),
-        this.local.put({ _id: '3', title: 'Old stuff', body: 'This is old stuff' })
+        this.local.bulkDocs([
+          { _id: '1', title: 'Old stuff', body: 'This is old stuff' },
+          { _id: '2', type: '_migration', name: 'mig1' },
+          { _id: '3', type: '_migration', name: 'mig2' },
+        ])
       ])
-        .then(() => consoleMock(() => CouchdbSyncProvider.sync(live, local)))
+        .then(() => CouchdbSyncProvider.sync(live, local))
+        .then(restore)
         .then(() => this.local.allDocs({ include_docs: true }))
-        .then(docs => docs.rows.map(doc => _.omit(doc.doc, '_rev')))
+        .then(result => result.rows.map(doc => doc.doc))
+        .then(docs => docs.map(doc => _.omit(doc, '_rev')))
         .then(docs => expect(docs).toEqual(this.liveTasks))
         .then(done)
-    })*/
+    })
   })
 
   describe('migrate', () => {
@@ -119,20 +129,18 @@ describe('PouchdbSyncProvider', () => {
           }
         }
       })
-      const inspect = stdout.inspect()
+      const restore = stdout.ignore()
       ceiling.migrate('local')
-        .then(() => inspect.restore())
-        .then(() => Promise.all([
-          this.local.allDocs({ include_docs: true })
-            .then(result => result.rows.map(row => row.doc))
-            .then(docs => docs.map(doc => _.omit(doc, '_rev')))
-            .then(docs => expect(docs).toEqual([
-              { _id: '1', title2: 'task1', body2: 'foo' },
-              { _id: '2', title2: 'task2', body2: 'bar' }
-            ])),
-          this.local.get('_local/migrations')
-            .then(doc => expect(doc.migrations).toEqual(['1', '2']))
-        ]))
+        .then(restore)
+        .then(() => this.local.allDocs({ include_docs: true }))
+        .then(result => result.rows.map(row => row.doc))
+        .then(docs => docs.map(doc => _.omit(doc, '_rev', '_id' )))
+        .then(docs => expect(new Set(docs)).toEqual(new Set([
+          { title2: 'task1', body2: 'foo' },
+          { title2: 'task2', body2: 'bar' },
+          { type: '_migration', name: '1' },
+          { type: '_migration', name: '2' },
+        ])))
         .then(done)
     })
 
@@ -174,17 +182,19 @@ describe('PouchdbSyncProvider', () => {
           }
         }
       })
-      const inspect = stdout.inspect()
-      this.local.put({ _id: '_local/migrations', migrations: ['1'] })
+      const restore = stdout.ignore()
+      this.local.put({ _id: uuid(), type: '_migration', name: '1' })
         .then(() => ceiling.migrate('local'))
-        .then(() => inspect.restore())
+        .then(restore)
         .then(() => this.local.allDocs({ include_docs: true }))
         .then(result => result.rows.map(row => row.doc))
-        .then(docs => docs.map(doc => _.omit(doc, '_rev')))
-        .then(docs => expect(docs).toEqual([
-          { _id: '1', title: 'task1', body2: 'foo' },
-          { _id: '2', title: 'task2', body2: 'bar' }
-        ]))
+        .then(docs => docs.map(doc => _.omit(doc, '_rev', '_id')))
+        .then(docs => expect(new Set(docs)).toEqual(new Set([
+          { title: 'task1', body2: 'foo' },
+          { title: 'task2', body2: 'bar' },
+          { type: '_migration', name: '1' },
+          { type: '_migration', name: '2' },
+        ])))
         .then(done)
     })
   })
