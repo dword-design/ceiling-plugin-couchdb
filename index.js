@@ -5,6 +5,8 @@ const uuid = require('uuid')
 
 PouchDB.plugin(require('pouchdb-erase'))
 
+const chunkSize = 100
+
 function _url(endpoint) {
   if (endpoint.inMemory) {
     return endpoint.database
@@ -33,15 +35,21 @@ module.exports = {
 
     const fromUrl = _url(fromEndpoint)
     const toUrl = _url(toEndpoint)
-    console.log('Connecting to the databases ...')
     const fromDb = new PouchDB(fromUrl)
     const toDb = new PouchDB(toUrl)
-    console.log('Cleaning databases ...')
+    
     return toDb.erase()
-      .then(() => console.log(`Importing collections from ${fromUrl} ...`))
-      .then(() => fromDb.allDocs({ include_docs: true, attachments: true }))
-      .then(docs => docs.rows.map(doc => _.omit(doc.doc, '_rev')))
-      .then(docs => toDb.bulkDocs(docs))
+      .then(() => fromDb.allDocs())
+      .then(result => _.map(result.rows, 'id'))
+      .then(ids => _.chunk(ids, chunkSize))
+      .then(chunkedIds => Promise.all(_.map(
+        chunkedIds,
+        (ids, chunkIndex) => Promise.resolve()
+          .then(() => console.log(`Importing documents ${chunkIndex * chunkSize} - ${(chunkIndex * chunkSize) + ids.length} ...`))
+          .then(() => fromDb.allDocs({ include_docs: true, attachments: true, startkey: ids[0], endkey: ids[ids.length - 1] }))
+          .then(result => result.rows.map(row => _.omit(row.doc, '_rev')))
+          .then(docs => toDb.bulkDocs(docs))
+      )))
   },
 
   getMigrationParams(endpoint) {

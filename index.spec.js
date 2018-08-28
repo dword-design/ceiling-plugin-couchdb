@@ -74,6 +74,28 @@ describe('PouchdbSyncProvider', () => {
         .then(docs => expect(docs).toEqual(this.liveTasks))
         .then(done)
     })
+
+    it('pagination', done => {
+      const live = {
+        inMemory: true,
+        database: 'live',
+      }
+      const local = {
+        inMemory: true,
+        database: 'local',
+      }
+      const liveDocs = _.range(250).map(index => ({ _id: index.toString().padStart(3, '0') }))
+      const restore = stdout.ignore()
+      this.live.bulkDocs(liveDocs)
+        .then(() => CouchdbSyncProvider.sync(live, local))
+        .then(restore)
+        .then(() => this.local.allDocs({ include_docs: true }))
+        .then(result => result.rows.map(doc => doc.doc))
+        .then(docs => docs.map(doc => _.omit(doc, '_rev')))
+        .then(docs => expect(docs).toEqual(liveDocs))
+        .then(done)
+        .catch(err => console.log(err))
+    })
   })
 
   describe('migrate', () => {
@@ -93,7 +115,7 @@ describe('PouchdbSyncProvider', () => {
 
     it('no existing migrations', done => {
       const ceiling = new Ceiling({
-        migrations: {
+        inlineMigrations: {
           couchdb: {
             1: {
               up({ db }) {
@@ -146,7 +168,7 @@ describe('PouchdbSyncProvider', () => {
 
     it('existing migrations', done => {
       const ceiling = new Ceiling({
-        migrations: {
+        inlineMigrations: {
           couchdb: {
             1: {
               up({ db }) {
