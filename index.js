@@ -44,8 +44,7 @@ module.exports = {
       .then(ids => _.chunk(ids, chunkSize))
       .then(chunkedIds => Promise.all(_.map(
         chunkedIds,
-        (ids, chunkIndex) => Promise.resolve()
-          .then(() => console.log(`Importing documents ${chunkIndex * chunkSize} - ${(chunkIndex * chunkSize) + ids.length} ...`))
+        ids => Promise.resolve()
           .then(() => fromDb.allDocs({ include_docs: true, attachments: true, startkey: ids[0], endkey: ids[ids.length - 1] }))
           .then(result => result.rows.map(row => _.omit(row.doc, '_rev')))
           .then(docs => toDb.bulkDocs(docs))
