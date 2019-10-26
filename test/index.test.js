@@ -1,6 +1,5 @@
-const CouchdbSyncProvider = require('./index')
+const CouchdbSyncProvider = require('ceiling-couchdb')
 const PouchDB = require('pouchdb')
-const _ = require('lodash')
 const Ceiling = require('ceiling')
 const stdout = require("test-console").stdout
 const uuid = require('uuid')
@@ -9,7 +8,7 @@ describe('PouchdbSyncProvider', () => {
 
   describe('sync', () => {
 
-    beforeEach(done => {
+    beforeEach(() => {
       this.live = new PouchDB('live')
       this.local = new PouchDB('local')
 
@@ -17,18 +16,14 @@ describe('PouchdbSyncProvider', () => {
         { _id: '1', title: 'task1', body: 'foo' },
         { _id: '2', title: 'task2', body: 'bar' },
       ]
-
-      done()
     })
 
-    afterEach(done => {
-      Promise.all([
+    afterEach(() => Promise.all([
         this.live.destroy(),
         this.local.destroy(),
-      ]).then(done)
-    })
+    ]))
 
-    it('empty to-database', done => {
+    it('empty to-database', async () => {
       const live = {
         inMemory: true,
         database: 'live',
@@ -38,17 +33,16 @@ describe('PouchdbSyncProvider', () => {
         database: 'local',
       }
       const restore = stdout.ignore()
-      this.live.bulkDocs(this.liveTasks)
-        .then(() => CouchdbSyncProvider.sync(live, local))
-        .then(restore)
-        .then(() => this.local.allDocs({ include_docs: true }))
-        .then(result => result.rows.map(doc => doc.doc))
-        .then(docs => docs.map(doc => _.omit(doc, '_rev')))
-        .then(docs => expect(docs).toEqual(this.liveTasks))
-        .then(done)
+      await this.live.bulkDocs(this.liveTasks)
+      await CouchdbSyncProvider.sync(live, local)
+      restore()
+      const result = await this.local.allDocs({ include_docs: true })
+      let docs = result.rows.map(doc => doc.doc)
+      docs = docs.map(doc => _.omit(doc, '_rev'))
+      expect(docs).toEqual(this.liveTasks)
     })
 
-    it('non-empty to-database', done => {
+    it('non-empty to-database', () => {
       const live = {
         inMemory: true,
         database: 'live',
@@ -58,7 +52,7 @@ describe('PouchdbSyncProvider', () => {
         database: 'local',
       }
       const restore = stdout.ignore()
-      Promise.all([
+      return Promise.all([
         this.live.bulkDocs(this.liveTasks),
         this.local.bulkDocs([
           { _id: '1', title: 'Old stuff', body: 'This is old stuff' },
@@ -72,10 +66,9 @@ describe('PouchdbSyncProvider', () => {
         .then(result => result.rows.map(doc => doc.doc))
         .then(docs => docs.map(doc => _.omit(doc, '_rev')))
         .then(docs => expect(docs).toEqual(this.liveTasks))
-        .then(done)
     })
 
-    it('pagination', done => {
+    it('pagination', () => {
       const live = {
         inMemory: true,
         database: 'live',
@@ -86,34 +79,29 @@ describe('PouchdbSyncProvider', () => {
       }
       const liveDocs = _.range(250).map(index => ({ _id: index.toString().padStart(3, '0') }))
       const restore = stdout.ignore()
-      this.live.bulkDocs(liveDocs)
+      return this.live.bulkDocs(liveDocs)
         .then(() => CouchdbSyncProvider.sync(live, local))
         .then(restore)
         .then(() => this.local.allDocs({ include_docs: true }))
         .then(result => result.rows.map(doc => doc.doc))
         .then(docs => docs.map(doc => _.omit(doc, '_rev')))
         .then(docs => expect(docs).toEqual(liveDocs))
-        .then(done)
-        .catch(err => console.log(err))
     })
   })
 
   describe('migrate', () => {
 
-    beforeEach(done => {
+    beforeEach(() => {
       this.local = new PouchDB('local')
-      this.local.bulkDocs([
+      return this.local.bulkDocs([
         { _id: '1', title: 'task1', body: 'foo' },
         { _id: '2', title: 'task2', body: 'bar' },
       ])
-        .then(done)
     })
 
-    afterEach(done => {
-      this.local.destroy().then(done)
-    })
+    afterEach(() => this.local.destroy())
 
-    it('no existing migrations', done => {
+    it('no existing migrations', () => {
       const ceiling = new Ceiling({
         inlineMigrations: {
           couchdb: {
@@ -152,7 +140,7 @@ describe('PouchdbSyncProvider', () => {
         }
       })
       const restore = stdout.ignore()
-      ceiling.migrate('local')
+      return ceiling.migrate('local')
         .then(restore)
         .then(() => this.local.allDocs({ include_docs: true }))
         .then(result => result.rows.map(row => row.doc))
@@ -163,10 +151,9 @@ describe('PouchdbSyncProvider', () => {
           { type: '_migration', name: '1' },
           { type: '_migration', name: '2' },
         ])))
-        .then(done)
     })
 
-    it('existing migrations', done => {
+    it('existing migrations', () => {
       const ceiling = new Ceiling({
         inlineMigrations: {
           couchdb: {
@@ -205,7 +192,7 @@ describe('PouchdbSyncProvider', () => {
         }
       })
       const restore = stdout.ignore()
-      this.local.put({ _id: uuid(), type: '_migration', name: '1' })
+      return this.local.put({ _id: uuid(), type: '_migration', name: '1' })
         .then(() => ceiling.migrate('local'))
         .then(restore)
         .then(() => this.local.allDocs({ include_docs: true }))
@@ -217,7 +204,6 @@ describe('PouchdbSyncProvider', () => {
           { type: '_migration', name: '1' },
           { type: '_migration', name: '2' },
         ])))
-        .then(done)
     })
   })
 

@@ -1,6 +1,4 @@
 const PouchDB = require('pouchdb')
-const notnull = require('not-null')
-const _ = require('lodash')
 const uuid = require('uuid')
 
 PouchDB.plugin(require('pouchdb-erase'))
@@ -11,11 +9,11 @@ function _url(endpoint) {
   if (endpoint.inMemory) {
     return endpoint.database
   }
-  var result = `http://${notnull(endpoint.user, 'root')}:${notnull(endpoint.password, 'root')}@${notnull(endpoint.host, 'localhost')}`
-  if (notnull(endpoint.port, 5984) != 80) {
-    result += `:${notnull(endpoint.port,  5984)}`;
+  var result = `http://${endpoint.user || 'root'}:${endpoint.password || 'root'}@${endpoint.host || 'localhost'}`
+  if ((endpoint.port || 5984) != 80) {
+    result += `:${endpoint.port || 5984}`;
   }
-  result += `/${notnull(endpoint.database, 'project')}`
+  result += `/${endpoint.database || 'project'}`
   return result
 }
 
@@ -37,7 +35,7 @@ module.exports = {
     const toUrl = _url(toEndpoint)
     const fromDb = new PouchDB(fromUrl)
     const toDb = new PouchDB(toUrl)
-    
+
     return toDb.erase()
       .then(() => fromDb.allDocs())
       .then(result => _.map(result.rows, 'id'))
@@ -73,11 +71,11 @@ module.exports = {
     if (endpoint.inMemory) {
       return endpoint.database
     }
-    var result = `http://${notnull(endpoint.host, 'localhost') }`
-    if (notnull(endpoint.port, 5984) != 80) {
-      result += `:${notnull(endpoint.port, 5984)}`
+    var result = `http://${endpoint.host || 'localhost'}`
+    if ((endpoint.port || 5984) != 80) {
+      result += `:${endpoint.port || 5984}`
     }
-    result += `/${notnull(endpoint.database, 'project')}`
+    result += `/${endpoint.database || 'project'}`
     return result
   }
 }

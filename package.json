@@ -1,16 +1,14 @@
 {
   "name": "ceiling-couchdb",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A Ceiling sync provider to sync two CouchDB databases",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "jasmine index.spec.js",
-    "deploy": "deploy-node-module"
+    "prepare": "dw-config-files",
+    "pretest": "install-self",
+    "test": "mocha"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dword-design/ceiling-couchdb.git"
-  },
+  "repository": "https://github.com/dword-design/ceiling-couchdb",
   "author": "Sebastian Landwehr",
   "license": "MIT",
   "bugs": {
@@ -18,15 +16,16 @@
   },
   "homepage": "https://github.com/dword-design/ceiling-couchdb#readme",
   "devDependencies": {
+    "@dword-design/config-files": "^1.0.3",
     "ceiling": "github:dword-design/ceiling",
-    "deploy-node-module": "^1.0.4",
-    "jasmine": "^3.1.0",
-    "lodash": "^4.17.10",
+    "expect": "^24.9.0",
+    "install-self": "dword-design/install-self#fork",
+    "mocha": "^6.2.2",
+    "nyc": "^14.1.1",
     "test-console": "^1.1.0",
     "uuid": "^3.3.2"
   },
   "dependencies": {
-    "not-null": "^1.0.1",
     "pouchdb": "^7.0.0",
     "pouchdb-erase": "^1.0.2"
   }
