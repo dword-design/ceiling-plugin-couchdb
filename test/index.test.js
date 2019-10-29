@@ -1,8 +1,9 @@
-const CouchdbSyncProvider = require('ceiling-couchdb')
-const PouchDB = require('pouchdb')
-const Ceiling = require('ceiling')
-const stdout = require("test-console").stdout
-const uuid = require('uuid')
+import CouchdbSyncProvider from 'ceiling-couchdb'
+import PouchDB from 'pouchdb'
+import Ceiling from 'ceiling'
+import { stdout } from 'test-console'
+import uuid from 'uuid'
+import { map, omit, range } from '@functions'
 
 describe('PouchdbSyncProvider', () => {
 
@@ -13,14 +14,14 @@ describe('PouchdbSyncProvider', () => {
       this.local = new PouchDB('local')
 
       this.liveTasks = [
-        { _id: '1', title: 'task1', body: 'foo' },
+        { _id: '1', title: 'task1', body: 'foo' },
         { _id: '2', title: 'task2', body: 'bar' },
       ]
     })
 
     afterEach(() => Promise.all([
-        this.live.destroy(),
-        this.local.destroy(),
+      this.live.destroy(),
+      this.local.destroy(),
     ]))
 
     it('empty to-database', async () => {
@@ -36,9 +37,8 @@ describe('PouchdbSyncProvider', () => {
       await this.live.bulkDocs(this.liveTasks)
       await CouchdbSyncProvider.sync(live, local)
       restore()
-      const result = await this.local.allDocs({ include_docs: true })
-      let docs = result.rows.map(doc => doc.doc)
-      docs = docs.map(doc => _.omit(doc, '_rev'))
+      const result = await this.local.allDocs({ include_docs: true })
+      const docs = result.rows |> map('doc') |> map(omit('_rev'))
       expect(docs).toEqual(this.liveTasks)
     })
 
@@ -56,15 +56,15 @@ describe('PouchdbSyncProvider', () => {
         this.live.bulkDocs(this.liveTasks),
         this.local.bulkDocs([
           { _id: '1', title: 'Old stuff', body: 'This is old stuff' },
-          { _id: '2', type: '_migration', name: 'mig1' },
-          { _id: '3', type: '_migration', name: 'mig2' },
-        ])
+          { _id: '2', type: '_migration', name: 'mig1' },
+          { _id: '3', type: '_migration', name: 'mig2' },
+        ]),
       ])
         .then(() => CouchdbSyncProvider.sync(live, local))
         .then(restore)
-        .then(() => this.local.allDocs({ include_docs: true }))
-        .then(result => result.rows.map(doc => doc.doc))
-        .then(docs => docs.map(doc => _.omit(doc, '_rev')))
+        .then(() => this.local.allDocs({ include_docs: true }))
+        .then(result => result.rows |> map('doc'))
+        .then(docs => docs |> map(omit('_rev')))
         .then(docs => expect(docs).toEqual(this.liveTasks))
     })
 
@@ -77,14 +77,14 @@ describe('PouchdbSyncProvider', () => {
         inMemory: true,
         database: 'local',
       }
-      const liveDocs = _.range(250).map(index => ({ _id: index.toString().padStart(3, '0') }))
+      const liveDocs = range(250) |> map(index => ({ _id: index.toString().padStart(3, '0') }))
       const restore = stdout.ignore()
       return this.live.bulkDocs(liveDocs)
         .then(() => CouchdbSyncProvider.sync(live, local))
         .then(restore)
-        .then(() => this.local.allDocs({ include_docs: true }))
-        .then(result => result.rows.map(doc => doc.doc))
-        .then(docs => docs.map(doc => _.omit(doc, '_rev')))
+        .then(() => this.local.allDocs({ include_docs: true }))
+        .then(result => result.rows |> map('doc'))
+        .then(docs => docs |> map(omit('_rev')))
         .then(docs => expect(docs).toEqual(liveDocs))
     })
   })
@@ -94,7 +94,7 @@ describe('PouchdbSyncProvider', () => {
     beforeEach(() => {
       this.local = new PouchDB('local')
       return this.local.bulkDocs([
-        { _id: '1', title: 'task1', body: 'foo' },
+        { _id: '1', title: 'task1', body: 'foo' },
         { _id: '2', title: 'task2', body: 'bar' },
       ])
     })
@@ -106,26 +106,22 @@ describe('PouchdbSyncProvider', () => {
         inlineMigrations: {
           couchdb: {
             1: {
-              up({ db }) {
-                return db.allDocs({ include_docs: true })
-                  .then(result => result.rows.map(row => row.doc))
-                  .then(docs => db.bulkDocs(docs.map(doc => ({
-                    ..._.omit(doc, 'title'),
-                    title2: doc.title,
-                  }))))
-              }
+              up: ({ db }) => db.allDocs({ include_docs: true })
+                .then(result => result.rows |> map('doc'))
+                .then(docs => db.bulkDocs(docs |> map(doc => ({
+                  ...doc |> omit('title'),
+                  title2: doc.title,
+                })))),
             },
             2: {
-              up({ db }) {
-                return db.allDocs({ include_docs: true })
-                  .then(result => result.rows.map(row => row.doc))
-                  .then(docs => db.bulkDocs(docs.map(doc => ({
-                    ..._.omit(doc, 'body'),
-                    body2: doc.body,
-                  }))))
-              }
+              up: ({ db }) => db.allDocs({ include_docs: true })
+                .then(result => result.rows |> map('doc'))
+                .then(docs => db.bulkDocs(docs |> map(doc => ({
+                  ...doc |> omit('body'),
+                  body2: doc.body,
+                })))),
             },
-          }
+          },
         },
         syncProviders: {
           couchdb: CouchdbSyncProvider,
@@ -135,20 +131,20 @@ describe('PouchdbSyncProvider', () => {
             couchdb: {
               inMemory: true,
               database: 'local',
-            }
-          }
-        }
+            },
+          },
+        },
       })
       const restore = stdout.ignore()
       return ceiling.migrate('local')
         .then(restore)
-        .then(() => this.local.allDocs({ include_docs: true }))
-        .then(result => result.rows.map(row => row.doc))
-        .then(docs => docs.map(doc => _.omit(doc, '_rev', '_id' )))
+        .then(() => this.local.allDocs({ include_docs: true }))
+        .then(result => result.rows |> map('doc'))
+        .then(docs => docs |> map(omit(['_rev', '_id'])))
         .then(docs => expect(new Set(docs)).toEqual(new Set([
-          { title2: 'task1', body2: 'foo' },
-          { title2: 'task2', body2: 'bar' },
-          { type: '_migration', name: '1' },
+          { title2: 'task1', body2: 'foo' },
+          { title2: 'task2', body2: 'bar' },
+          { type: '_migration', name: '1' },
           { type: '_migration', name: '2' },
         ])))
     })
@@ -158,26 +154,22 @@ describe('PouchdbSyncProvider', () => {
         inlineMigrations: {
           couchdb: {
             1: {
-              up({ db }) {
-                return db.allDocs({ include_docs: true })
-                  .then(result => result.rows.map(row => row.doc))
-                  .then(docs => db.bulkDocs(docs.map(doc => ({
-                    ..._.omit(doc, 'title'),
-                    title2: doc.title,
-                  }))))
-              }
+              up: ({ db }) => db.allDocs({ include_docs: true })
+                .then(result => result.rows |> map('doc'))
+                .then(docs => db.bulkDocs(docs |> map(doc => ({
+                  ...doc |> omit('title'),
+                  title2: doc.title,
+                })))),
             },
             2: {
-              up({ db }) {
-                return db.allDocs({ include_docs: true })
-                  .then(result => result.rows.map(row => row.doc))
-                  .then(docs => db.bulkDocs(docs.map(doc => ({
-                    ..._.omit(doc, 'body'),
-                    body2: doc.body,
-                  }))))
-              }
+              up: ({ db }) => db.allDocs({ include_docs: true })
+                .then(result => result.rows |> map('doc'))
+                .then(docs => db.bulkDocs(docs |> map(doc => ({
+                  ...doc |> omit('body'),
+                  body2: doc.body,
+                })))),
             },
-          }
+          },
         },
         syncProviders: {
           couchdb: CouchdbSyncProvider,
@@ -187,21 +179,21 @@ describe('PouchdbSyncProvider', () => {
             couchdb: {
               inMemory: true,
               database: 'local',
-            }
-          }
-        }
+            },
+          },
+        },
       })
       const restore = stdout.ignore()
-      return this.local.put({ _id: uuid(), type: '_migration', name: '1' })
+      return this.local.put({ _id: uuid(), type: '_migration', name: '1' })
         .then(() => ceiling.migrate('local'))
         .then(restore)
-        .then(() => this.local.allDocs({ include_docs: true }))
-        .then(result => result.rows.map(row => row.doc))
-        .then(docs => docs.map(doc => _.omit(doc, '_rev', '_id')))
+        .then(() => this.local.allDocs({ include_docs: true }))
+        .then(result => result.rows |> map('doc'))
+        .then(docs => docs |> map(omit(['_rev', '_id'])))
         .then(docs => expect(new Set(docs)).toEqual(new Set([
-          { title: 'task1', body2: 'foo' },
-          { title: 'task2', body2: 'bar' },
-          { type: '_migration', name: '1' },
+          { title: 'task1', body2: 'foo' },
+          { title: 'task2', body2: 'bar' },
+          { type: '_migration', name: '1' },
           { type: '_migration', name: '2' },
         ])))
     })
