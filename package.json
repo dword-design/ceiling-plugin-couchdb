@@ -1,14 +1,14 @@
 {
   "name": "ceiling-couchdb",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A Ceiling sync provider to sync two CouchDB databases",
   "main": "dist/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "prepare": "base",
-    "test": "base test"
+    "prepare": "base-node prepare",
+    "test": "base-node test"
   },
   "repository": "https://github.com/dword-design/ceiling-couchdb",
   "author": "Sebastian Landwehr",
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/dword-design/ceiling-couchdb#readme",
   "devDependencies": {
-    "@dword-design/base-node": "^0.1.16",
+    "@dword-design/base-node": "^0.4.1",
     "ceiling": "github:dword-design/ceiling",
     "test-console": "^1.1.0",
     "uuid": "^3.3.2"
