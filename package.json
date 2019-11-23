@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/dword-design/ceiling-couchdb#readme",
   "devDependencies": {
-    "@dword-design/base-node": "0.4.1",
+    "@dword-design/base-node": "0.4.4",
     "ceiling": "github:dword-design/ceiling",
     "test-console": "1.1.0",
     "uuid": "3.3.3"
