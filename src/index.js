@@ -15,7 +15,7 @@ export const endpointToString = ({
   port = 5984,
 } = {}) => {
   const credentials = user !== '' ? `${user}${password !== '' ? `:${password}` : ''}@` : ''
-  return `http://${credentials}${host}${port !== 5984 ? `:${port}` : ''}/${database}`
+  return `http://${credentials}${host}${port !== 80 ? `:${port}` : ''}/${database}`
 }
 
 const getDatabase = endpoint => new PouchDB(endpoint |> endpointToString)
