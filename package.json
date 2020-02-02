@@ -21,7 +21,7 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@dword-design/base": "^4.0.1",
+    "@dword-design/base": "^5.0.0",
     "ceiling": "^2.0.0",
     "child-process-promise": "^2.2.1",
     "delay": "^4.3.0",
