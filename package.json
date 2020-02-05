@@ -5,13 +5,14 @@
   "repository": "dword-design/ceiling-plugin-couchdb",
   "license": "MIT",
   "author": "Sebastian Landwehr <info@dword-design.de>",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
   "scripts": {
-    "prepublishOnly": "base build",
-    "start": "base start",
+    "depgraph": "base depgraph",
+    "prepare": "base prepare",
+    "prepublishOnly": "base prepublishOnly",
     "test": "base test"
   },
   "dependencies": {
@@ -21,7 +22,7 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@dword-design/base": "^4.0.1",
+    "@dword-design/base": "^5.0.0",
     "ceiling": "^2.0.0",
     "child-process-promise": "^2.2.1",
     "delay": "^4.3.0",
