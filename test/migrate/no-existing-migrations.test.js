@@ -81,7 +81,7 @@ export default () => withLocalTmpDir(__dirname, async () => {
       |> await
       |> property('rows')
       |> map('doc')
-      |> map(omit(['_id', '_rev']))
+      |> map(omit(['_id', '_rev'])),
   )
 
   expect(docs).toEqual(new Set([
