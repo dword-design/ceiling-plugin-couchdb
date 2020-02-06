@@ -26,7 +26,6 @@
     "ceiling": "^2.0.0",
     "child-process-promise": "^2.2.1",
     "delay": "^4.3.0",
-    "expect": "^24.9.0",
     "output-files": "^1.1.12",
     "portfinder": "^1.0.25",
     "pouchdb-adapter-node-websql": "^7.0.0",
