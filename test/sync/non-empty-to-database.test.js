@@ -1,7 +1,6 @@
 import withLocalTmpDir from 'with-local-tmp-dir'
 import outputFiles from 'output-files'
 import { spawn } from 'child-process-promise'
-import expect from 'expect'
 import { endent, property, map, omit } from '@dword-design/functions'
 import PouchDB from 'pouchdb'
 import portfinder from 'portfinder'

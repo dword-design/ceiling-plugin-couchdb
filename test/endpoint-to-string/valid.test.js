@@ -1,5 +1,4 @@
 import { endpointToString } from 'ceiling-plugin-couchdb'
-import expect from 'expect'
 
 export default () => {
   expect(endpointToString()).toEqual('http://localhost:5984/project')
