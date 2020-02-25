@@ -4,7 +4,7 @@ import execa from 'execa'
 import { endent, property, map, omit } from '@dword-design/functions'
 import PouchDB from 'pouchdb'
 import portfinder from 'portfinder'
-import uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 import kill from 'tree-kill'
 import portReady from 'port-ready'
 
