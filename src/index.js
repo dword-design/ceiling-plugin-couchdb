@@ -1,5 +1,5 @@
 import PouchDB from 'pouchdb'
-import uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 import PouchDBErase from 'pouchdb-erase'
 import { map, omit, unary, promiseAll, chunk, property, filter, first, last, invokeArgs } from '@dword-design/functions'
 
