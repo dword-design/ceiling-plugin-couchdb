@@ -105,7 +105,7 @@ export default {
     expect(docs).toEqual(tasks)
     kill(childProcess.pid)
   }),
-  'non-empty to-database': () => withLocalTmpDir(__dirname, async () => {
+  'non-empty to-database': () => withLocalTmpDir(async () => {
 
     const port = portfinder.getPortPromise() |> await
 
