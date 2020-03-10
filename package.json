@@ -34,5 +34,8 @@
     "pouchdb-server": "^4.2.0",
     "tree-kill": "^1.2.2",
     "with-local-tmp-dir": "^2.2.5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
