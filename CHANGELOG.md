@@ -1,3 +1,11 @@
+## [1.0.6](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v1.0.5...v1.0.6) (2020-07-04)
+
+
+### Bug Fixes
+
+* fixes after upgrades ([8d65538](https://github.com/dword-design/ceiling-plugin-couchdb/commit/8d65538bbc093322800bb06ef0f8fb8dee7de2a1))
+* upgrades ([cafd49c](https://github.com/dword-design/ceiling-plugin-couchdb/commit/cafd49cef4d00d567cfe3d91c94e5a2aa1636fde))
+
 ## [1.0.5](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v1.0.4...v1.0.5) (2020-02-25)
 
 
