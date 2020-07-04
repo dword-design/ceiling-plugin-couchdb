@@ -11,10 +11,10 @@
   ],
   "scripts": {
     "commit": "base commit",
-    "depgraph": "base depgraph",
+    "dev": "base dev",
+    "lint": "base lint",
     "prepare": "base prepare",
     "prepublishOnly": "base prepublishOnly",
-    "release": "base release",
     "test": "base test"
   },
   "dependencies": {
@@ -32,7 +32,7 @@
     "portfinder": "^1.0.25",
     "pouchdb-adapter-node-websql": "^7.0.0",
     "pouchdb-server": "^4.2.0",
-    "tree-kill": "^1.2.2",
+    "tree-kill-promise": "^1.0.2",
     "with-local-tmp-dir": "^2.2.5"
   },
   "publishConfig": {

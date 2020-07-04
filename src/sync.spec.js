@@ -1,19 +1,18 @@
-import withLocalTmpDir from 'with-local-tmp-dir'
-import outputFiles from 'output-files'
+import { endent, map, omit, property, range } from '@dword-design/functions'
 import execa from 'execa'
-import { endent, property, map, omit, range } from '@dword-design/functions'
-import PouchDB from 'pouchdb'
-import portfinder from 'portfinder'
+import outputFiles from 'output-files'
 import portReady from 'port-ready'
-import kill from 'tree-kill'
+import portfinder from 'portfinder'
+import PouchDB from 'pouchdb'
+import kill from 'tree-kill-promise'
+import withLocalTmpDir from 'with-local-tmp-dir'
 
 export default {
-  chunking: () => withLocalTmpDir(async () => {
-
-    const port = portfinder.getPortPromise() |> await
-
-    await outputFiles({
-      'ceiling.config.js': endent`
+  chunking: () =>
+    withLocalTmpDir(async () => {
+      const port = portfinder.getPortPromise() |> await
+      await outputFiles({
+        'ceiling.config.js': endent`
         module.exports = {
           plugins: ['couchdb'],
           endpoints: {
@@ -26,41 +25,38 @@ export default {
           },
         }
       `,
-      'package.json': endent`
+        'node_modules/ceiling-plugin-couchdb/index.js':
+          "module.exports = require('../../../src')",
+        'package.json': endent`
         {
           "devDependencies": {
             "ceiling-plugin-couchdb": "^1.0.0"
           }
         }
       `,
-    })
-
-    const tasks = range(250) |> map(index => ({ _id: index.toString().padStart(3, '0') }))
-
-    const childProcess = execa('pouchdb-server', ['--port', port])
-
-    await portReady(port)
-    const live = new PouchDB(`http://localhost:${port}/live`)
-    const local = new PouchDB(`http://localhost:${port}/local`)
-
-    await live.bulkDocs(tasks)
-    await execa.command('ceiling pull -y')
-
-    const docs = local.allDocs({ include_docs: true })
-      |> await
-      |> property('rows')
-      |> map('doc')
-      |> map(omit('_rev'))
-
-    expect(docs).toEqual(tasks)
-    kill(childProcess.pid)
-  }),
-  'empty to-database': () => withLocalTmpDir(async () => {
-
-    const port = portfinder.getPortPromise() |> await
-
-    await outputFiles({
-      'ceiling.config.js': endent`
+      })
+      const tasks =
+        range(250) |> map(index => ({ _id: index.toString().padStart(3, '0') }))
+      const childProcess = execa('pouchdb-server', ['--port', port])
+      await portReady(port)
+      const live = new PouchDB(`http://localhost:${port}/live`)
+      const local = new PouchDB(`http://localhost:${port}/local`)
+      await live.bulkDocs(tasks)
+      await execa.command('ceiling pull -y')
+      const docs =
+        local.allDocs({ include_docs: true })
+        |> await
+        |> property('rows')
+        |> map('doc')
+        |> map(omit('_rev'))
+      expect(docs).toEqual(tasks)
+      await kill(childProcess.pid)
+    }),
+  'empty to-database': () =>
+    withLocalTmpDir(async () => {
+      const port = portfinder.getPortPromise() |> await
+      await outputFiles({
+        'ceiling.config.js': endent`
         module.exports = {
           plugins: ['couchdb'],
           endpoints: {
@@ -73,44 +69,40 @@ export default {
           },
         }
       `,
-      'package.json': endent`
+        'node_modules/ceiling-plugin-couchdb/index.js':
+          "module.exports = require('../../../src')",
+        'package.json': endent`
         {
           "devDependencies": {
             "ceiling-plugin-couchdb": "^1.0.0"
           }
         }
       `,
-    })
-
-    const tasks = [
-      { _id: '1', title: 'task1', body: 'foo' },
-      { _id: '2', title: 'task2', body: 'bar' },
-    ]
-
-    const childProcess = execa('pouchdb-server', ['--port', port])
-
-    await portReady(port)
-    const live = new PouchDB(`http://localhost:${port}/live`)
-    const local = new PouchDB(`http://localhost:${port}/local`)
-
-    await live.bulkDocs(tasks)
-    await execa.command('ceiling pull -y')
-
-    const docs = local.allDocs({ include_docs: true })
-      |> await
-      |> property('rows')
-      |> map('doc')
-      |> map(omit('_rev'))
-
-    expect(docs).toEqual(tasks)
-    kill(childProcess.pid)
-  }),
-  'non-empty to-database': () => withLocalTmpDir(async () => {
-
-    const port = portfinder.getPortPromise() |> await
-
-    await outputFiles({
-      'ceiling.config.js': endent`
+      })
+      const tasks = [
+        { _id: '1', body: 'foo', title: 'task1' },
+        { _id: '2', body: 'bar', title: 'task2' },
+      ]
+      const childProcess = execa('pouchdb-server', ['--port', port])
+      await portReady(port)
+      const live = new PouchDB(`http://localhost:${port}/live`)
+      const local = new PouchDB(`http://localhost:${port}/local`)
+      await live.bulkDocs(tasks)
+      await execa.command('ceiling pull -y')
+      const docs =
+        local.allDocs({ include_docs: true })
+        |> await
+        |> property('rows')
+        |> map('doc')
+        |> map(omit('_rev'))
+      expect(docs).toEqual(tasks)
+      await kill(childProcess.pid)
+    }),
+  'non-empty to-database': () =>
+    withLocalTmpDir(async () => {
+      const port = portfinder.getPortPromise() |> await
+      await outputFiles({
+        'ceiling.config.js': endent`
         module.exports = {
           plugins: ['couchdb'],
           endpoints: {
@@ -123,44 +115,40 @@ export default {
           },
         }
       `,
-      'package.json': endent`
+        'node_modules/ceiling-plugin-couchdb/index.js':
+          "module.exports = require('../../../src')",
+        'package.json': endent`
         {
           "devDependencies": {
             "ceiling-plugin-couchdb": "^1.0.0"
           }
         }
       `,
-    })
-
-    const tasks = [
-      { _id: '1', title: 'task1', body: 'foo' },
-      { _id: '2', title: 'task2', body: 'bar' },
-    ]
-
-    const childProcess = execa('pouchdb-server', ['--port', port])
-
-    await portReady(port)
-    const live = new PouchDB(`http://localhost:${port}/live`)
-    const local = new PouchDB(`http://localhost:${port}/local`)
-
-    await Promise.all([
-      live.bulkDocs(tasks),
-      local.bulkDocs([
-        { _id: '1', title: 'Old stuff', body: 'This is old stuff' },
-        { _id: '2', type: '_migration', name: 'mig1' },
-        { _id: '3', type: '_migration', name: 'mig2' },
-      ]),
-    ])
-
-    await execa.command('ceiling pull -y')
-
-    const docs = local.allDocs({ include_docs: true })
-      |> await
-      |> property('rows')
-      |> map('doc')
-      |> map(omit('_rev'))
-
-    expect(docs).toEqual(tasks)
-    kill(childProcess.pid)
-  }),
+      })
+      const tasks = [
+        { _id: '1', body: 'foo', title: 'task1' },
+        { _id: '2', body: 'bar', title: 'task2' },
+      ]
+      const childProcess = execa('pouchdb-server', ['--port', port])
+      await portReady(port)
+      const live = new PouchDB(`http://localhost:${port}/live`)
+      const local = new PouchDB(`http://localhost:${port}/local`)
+      await Promise.all([
+        live.bulkDocs(tasks),
+        local.bulkDocs([
+          { _id: '1', body: 'This is old stuff', title: 'Old stuff' },
+          { _id: '2', name: 'mig1', type: '_migration' },
+          { _id: '3', name: 'mig2', type: '_migration' },
+        ]),
+      ])
+      await execa.command('ceiling pull -y')
+      const docs =
+        local.allDocs({ include_docs: true })
+        |> await
+        |> property('rows')
+        |> map('doc')
+        |> map(omit('_rev'))
+      expect(docs).toEqual(tasks)
+      await kill(childProcess.pid)
+    }),
 }
