@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v1.0.6...v1.0.7) (2020-07-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency uuid to v8 ([a9ee6e6](https://github.com/dword-design/ceiling-plugin-couchdb/commit/a9ee6e6a1a53f0adf85e86bf512a69cac59c35be))
+
 ## [1.0.6](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v1.0.5...v1.0.6) (2020-07-04)
 
 
