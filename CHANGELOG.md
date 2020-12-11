@@ -1,3 +1,10 @@
+## [1.0.10](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v1.0.9...v1.0.10) (2020-12-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency execa to v5 ([885a8e8](https://github.com/dword-design/ceiling-plugin-couchdb/commit/885a8e8ecc1bbce910d4a54fe7e8d64b1028c35f))
+
 ## [1.0.9](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v1.0.8...v1.0.9) (2020-12-02)
 
 

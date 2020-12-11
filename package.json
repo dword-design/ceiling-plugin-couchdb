@@ -1,6 +1,6 @@
 {
   "name": "ceiling-plugin-couchdb",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A Ceiling plugin to sync two CouchDB databases",
   "repository": "dword-design/ceiling-plugin-couchdb",
   "license": "MIT",
