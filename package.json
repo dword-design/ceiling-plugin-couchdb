@@ -3,6 +3,7 @@
   "version": "1.0.11",
   "description": "A Ceiling plugin to sync two CouchDB databases",
   "repository": "dword-design/ceiling-plugin-couchdb",
+  "funding": "https://www.buymeacoffee.com/dword",
   "license": "MIT",
   "author": "Sebastian Landwehr <info@dword-design.de>",
   "main": "dist/index.js",
