@@ -20,7 +20,7 @@
     "test": "base test"
   },
   "dependencies": {
-    "@dword-design/functions": "^2.6.3",
+    "@dword-design/functions": "^3.0.0",
     "pouchdb": "^7.0.0",
     "pouchdb-erase": "^1.0.2",
     "uuid": "^8.0.0"
