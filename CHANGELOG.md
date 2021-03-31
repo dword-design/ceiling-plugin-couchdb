@@ -1,3 +1,10 @@
+## [1.0.14](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v1.0.13...v1.0.14) (2021-03-31)
+
+
+### Bug Fixes
+
+* lock file maintenance ([#24](https://github.com/dword-design/ceiling-plugin-couchdb/issues/24)) ([3e597b0](https://github.com/dword-design/ceiling-plugin-couchdb/commit/3e597b04aad551afbcd2fd872d7481de59ec671b))
+
 ## [1.0.13](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v1.0.12...v1.0.13) (2021-03-23)
 
 
