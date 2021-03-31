@@ -35,14 +35,19 @@ export default {
         }
       `,
       })
+
       const tasks =
         range(250) |> map(index => ({ _id: index.toString().padStart(3, '0') }))
+
       const childProcess = execa('pouchdb-server', ['--port', port])
       await portReady(port)
+
       const live = new PouchDB(`http://localhost:${port}/live`)
+
       const local = new PouchDB(`http://localhost:${port}/local`)
       await live.bulkDocs(tasks)
       await execa.command('ceiling pull -y')
+
       const docs =
         local.allDocs({ include_docs: true })
         |> await
@@ -79,16 +84,21 @@ export default {
         }
       `,
       })
+
       const tasks = [
         { _id: '1', body: 'foo', title: 'task1' },
         { _id: '2', body: 'bar', title: 'task2' },
       ]
+
       const childProcess = execa('pouchdb-server', ['--port', port])
       await portReady(port)
+
       const live = new PouchDB(`http://localhost:${port}/live`)
+
       const local = new PouchDB(`http://localhost:${port}/local`)
       await live.bulkDocs(tasks)
       await execa.command('ceiling pull -y')
+
       const docs =
         local.allDocs({ include_docs: true })
         |> await
@@ -125,13 +135,17 @@ export default {
         }
       `,
       })
+
       const tasks = [
         { _id: '1', body: 'foo', title: 'task1' },
         { _id: '2', body: 'bar', title: 'task2' },
       ]
+
       const childProcess = execa('pouchdb-server', ['--port', port])
       await portReady(port)
+
       const live = new PouchDB(`http://localhost:${port}/live`)
+
       const local = new PouchDB(`http://localhost:${port}/local`)
       await Promise.all([
         live.bulkDocs(tasks),
@@ -142,6 +156,7 @@ export default {
         ]),
       ])
       await execa.command('ceiling pull -y')
+
       const docs =
         local.allDocs({ include_docs: true })
         |> await
