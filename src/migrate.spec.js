@@ -61,8 +61,10 @@ export default {
         }
       `,
       })
+
       const childProcess = execa('pouchdb-server', ['--port', port])
       await portReady(port)
+
       const local = new PouchDB(`http://localhost:${port}/local`)
       await local.bulkDocs([
         { _id: '1', body: 'foo', title: 'task1' },
@@ -70,6 +72,7 @@ export default {
         { _id: uuid(), name: '1', type: '_migration' },
       ])
       await execa.command('ceiling migrate -y')
+
       const docs = new Set(
         local.allDocs({ include_docs: true })
           |> await
@@ -139,14 +142,17 @@ export default {
         }
       `,
       })
+
       const childProcess = execa('pouchdb-server', ['--port', port])
       await portReady(port)
+
       const local = new PouchDB(`http://localhost:${port}/local`)
       await local.bulkDocs([
         { _id: '1', body: 'foo', title: 'task1' },
         { _id: '2', body: 'bar', title: 'task2' },
       ])
       await execa.command('ceiling migrate -y')
+
       const docs = new Set(
         local.allDocs({ include_docs: true })
           |> await

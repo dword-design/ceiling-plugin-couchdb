@@ -7,9 +7,11 @@ export default endpoint => {
     user: '',
     ...endpoint,
   }
+
   const credentials = endpoint.user
     ? `${endpoint.user}${endpoint.password ? `:${endpoint.password}` : ''}@`
     : ''
+
   return `http://${credentials}${endpoint.host}${
     endpoint.port === 80 ? '' : `:${endpoint.port}`
   }/${endpoint.database}`

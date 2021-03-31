@@ -16,8 +16,10 @@ const chunkSize = 100
 
 export default async (from, to) => {
   const fromDb = new PouchDB(from |> endpointToString)
+
   const toDb = new PouchDB(to |> endpointToString)
   await toDb.erase()
+
   const chunksToWrite =
     fromDb.allDocs()
     |> await
@@ -39,5 +41,6 @@ export default async (from, to) => {
     )
     |> promiseAll
     |> await
+
   return chunksToWrite |> map(unary(toDb.bulkDocs)) |> promiseAll
 }

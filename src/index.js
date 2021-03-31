@@ -12,6 +12,7 @@ PouchDB.plugin(PouchDBErase)
 export default {
   addExecutedMigrations: (endpoint, migrations) => {
     const db = endpoint |> getDatabase
+
     return (
       migrations
       |> map(name => ({ _id: uuid(), name, type: '_migration' }))
