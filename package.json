@@ -1,7 +1,7 @@
 {
   "name": "ceiling-plugin-couchdb",
   "version": "1.0.15",
-  "description": "A Ceiling plugin to sync two CouchDB databases",
+  "description": "A Ceiling sync provider to sync two CouchDB databases",
   "repository": "dword-design/ceiling-plugin-couchdb",
   "funding": "https://www.buymeacoffee.com/dword",
   "license": "MIT",
@@ -39,5 +39,7 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "homepage": null,
+  "keywords": []
 }
