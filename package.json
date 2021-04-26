@@ -35,7 +35,7 @@
     "pouchdb-adapter-node-websql": "^7.0.0",
     "pouchdb-server": "^4.2.0",
     "tree-kill-promise": "^1.0.2",
-    "with-local-tmp-dir": "^2.2.5"
+    "with-local-tmp-dir": "^3.0.0"
   },
   "publishConfig": {
     "access": "public"
