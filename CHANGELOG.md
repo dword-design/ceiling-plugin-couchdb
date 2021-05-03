@@ -1,3 +1,19 @@
+# [2.0.0](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v1.0.16...v2.0.0) (2021-05-03)
+
+
+### Bug Fixes
+
+* update dependency @dword-design/base to v8 ([#37](https://github.com/dword-design/ceiling-plugin-couchdb/issues/37)) ([9c85713](https://github.com/dword-design/ceiling-plugin-couchdb/commit/9c857130e3a6a10400e8c578e9e15878dd456bbe))
+
+
+### BREAKING CHANGES
+
+* require Node.js >= 12
+
+Co-authored-by: Renovate Bot <bot@renovateapp.com>
+Co-authored-by: Sebastian Landwehr <info@dword-design.de>
+Co-authored-by: GitHub Actions <actions@github.com>
+
 ## [1.0.16](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v1.0.15...v1.0.16) (2021-04-26)
 
 
