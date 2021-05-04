@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v2.0.0...v2.0.1) (2021-05-04)
+
+
+### Bug Fixes
+
+* update dependency with-local-tmp-dir to v4 ([#42](https://github.com/dword-design/ceiling-plugin-couchdb/issues/42)) ([0296c47](https://github.com/dword-design/ceiling-plugin-couchdb/commit/0296c47256a6d249334ca74114235b7cdbfb9eed))
+
 # [2.0.0](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v1.0.16...v2.0.0) (2021-05-03)
 
 
