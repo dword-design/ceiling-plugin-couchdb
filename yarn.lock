@@ -2654,10 +2654,10 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-ceiling@^2.0.0:
-  version "2.2.17"
-  resolved "https://registry.yarnpkg.com/ceiling/-/ceiling-2.2.17.tgz#1260a007906b1f1cef43873e8741d513684f7a6a"
-  integrity sha512-h27TI2rHgZtK17M450a2nKdvHAkTPSJ0+ZPtkJR30C+BPdB4oPWA9eEQ/VsHRvMq2GZSSv1li4O4U5nX6h/EFQ==
+ceiling@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ceiling/-/ceiling-3.0.0.tgz#1113b3e0aa894da82b75f9072f57bacad36a87b8"
+  integrity sha512-4wMx+WbfS7OkK9YEdf2jwZ4K/XTByjWamg2ExesfYlmHOtm5AUV9b8ZqNZZxeE0Uefs/YTA3yOUtbrFTt/4sxA==
   dependencies:
     "@dword-design/functions" "^3.0.0"
     cosmiconfig "^7.0.0"
