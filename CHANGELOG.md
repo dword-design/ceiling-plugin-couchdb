@@ -1,3 +1,13 @@
+## [2.0.2](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v2.0.1...v2.0.2) (2021-05-04)
+
+
+### Bug Fixes
+
+* update dependency @dword-design/functions to v4 ([#38](https://github.com/dword-design/ceiling-plugin-couchdb/issues/38)) ([cd19566](https://github.com/dword-design/ceiling-plugin-couchdb/commit/cd195667cb3f9858e55f717b0ad05c8613175c5e))
+* update dependency ceiling to v3 ([#39](https://github.com/dword-design/ceiling-plugin-couchdb/issues/39)) ([5d803f7](https://github.com/dword-design/ceiling-plugin-couchdb/commit/5d803f7aa6f1ecfc06b61282222f2108420189e2))
+* update dependency output-files to v2 ([#40](https://github.com/dword-design/ceiling-plugin-couchdb/issues/40)) ([b52efb1](https://github.com/dword-design/ceiling-plugin-couchdb/commit/b52efb17740648614003f143440f28ba4afbea96))
+* update dependency tree-kill-promise to v2 ([#41](https://github.com/dword-design/ceiling-plugin-couchdb/issues/41)) ([b1ab0f1](https://github.com/dword-design/ceiling-plugin-couchdb/commit/b1ab0f153f22a467e55ee1f90b29107554b1589a))
+
 ## [2.0.1](https://github.com/dword-design/ceiling-plugin-couchdb/compare/v2.0.0...v2.0.1) (2021-05-04)
 
 
