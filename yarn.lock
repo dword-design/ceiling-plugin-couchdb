@@ -10439,10 +10439,10 @@ traverse@~0.6.6:
   resolved "https://registry.yarnpkg.com/traverse/-/traverse-0.6.6.tgz#cbdf560fd7b9af632502fed40f918c157ea97137"
   integrity sha1-y99WD9e5r2MlAv7UD5GMFX6pcTc=
 
-tree-kill-promise@^1.0.2:
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/tree-kill-promise/-/tree-kill-promise-1.0.12.tgz#9ba16c7c9e9d76639c9624eca1057276aab6115d"
-  integrity sha512-wmzZOzvZ2KN6FI61hexYhU7jhCBNUJ6eafgJMzR/RIMSGkQubwt4WFzCJyXcPJseHtnjVZUi+mKGKBW5oQQpeg==
+tree-kill-promise@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/tree-kill-promise/-/tree-kill-promise-2.0.1.tgz#362b1a83742c524bdef14e9518f6fd1b87c63236"
+  integrity sha512-JuiSvZYHDoC3v/VV7rqtG2HwED1/3aphe8cLN48UvKdb4vPyem11C9P8I/LYWOSvsHC3veLtQ9dgy+YB8zrXWA==
   dependencies:
     tree-kill "^1.2.2"
 
