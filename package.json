@@ -34,7 +34,7 @@
     "portfinder": "^1.0.25",
     "pouchdb-adapter-node-websql": "^7.0.0",
     "pouchdb-server": "^4.2.0",
-    "tree-kill-promise": "^1.0.2",
+    "tree-kill-promise": "^2.0.0",
     "with-local-tmp-dir": "^4.0.0"
   },
   "engines": {
