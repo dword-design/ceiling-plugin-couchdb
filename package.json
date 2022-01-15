@@ -1,6 +1,6 @@
 {
   "name": "ceiling-plugin-couchdb",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "A Ceiling plugin to sync two CouchDB databases",
   "repository": "dword-design/ceiling-plugin-couchdb",
   "funding": "https://github.com/sponsors/dword-design",
