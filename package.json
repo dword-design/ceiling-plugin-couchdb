@@ -28,7 +28,7 @@
   "devDependencies": {
     "@dword-design/base": "^8.0.0",
     "ceiling": "^3.0.0",
-    "execa": "^5.0.0",
+    "execa": "^6.0.0",
     "output-files": "^2.0.0",
     "port-ready": "^0.1.0",
     "portfinder": "^1.0.25",
